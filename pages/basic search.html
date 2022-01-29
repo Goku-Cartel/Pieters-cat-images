@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="stylesheet1.css">
+
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body class="megatron">
+    <nav>
+        <label class="logo">CatScratch</label>
+        <ul class="fonty">
+            <li><a href="index.html" class="active">home:</a></li>
+            <li><a href="breed-select.html">breed:</a></li>
+            <li><a href="category search.html">category:</a></li>
+            <li><a href="basic search.html">basic search:</a></li>
+            <li><a href="favourites.html"> favourites:  </a></li>
+            <li><a href="voting.html"> vote:  </a></li>
+
+        </ul>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <div id="app" class="megatronuis">
+        <v-app>
+            <v-content>
+                <v-container>
+
+                    <v-layout align-center justify-center>
+                        <v-btn color="blue" dark large @click="loadNextImage">
+                            Another &nbsp;
+                            <v-icon>refresh</v-icon>
+                        </v-btn>
+                    </v-layout>
+
+                    <v-layout row wrap>
+                        <v-flex xs12>
+                            <v-card flat tile class="d-flex">
+                                <v-img :src="image.url" contain>
+                                </v-img>
+                            </v-card>
+                        </v-flex>
+                    </v-layout>
+
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                image: {
+                    url: ""
+                }
+            },
+            created() {
+                this.loadNextImage();
+            },
+            methods: {
+                async loadNextImage() {
+                    try {
+                        axios.defaults.headers.common['87e6bf7c-1563-4361-8f95-af8f1cdceeb1'] = "87e6bf7c-1563-4361-8f95-af8f1cdceeb1" // Replace this with your API Key
+
+                        let response = await axios.get('https://api.thecatapi.com/v1/images/search', {
+                                params: {
+                                    limit: 1,
+                                    size: "full"
+                                }
+                            }) // Ask for 1 Image, at full resolution
+
+                        this.image = response.data[0] // the response is an Array, so just use the first item as the Image
+
+                        console.log("-- Image from TheCatAPI.com")
+                        console.log("id:", this.image.id)
+                        console.log("url:", this.image.url)
+
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
